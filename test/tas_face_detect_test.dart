@@ -17,7 +17,7 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    expect(await TasFaceDetect.platformVersion, '42');
+  test('findFaces', () async {
+    expect(await TasFaceDetect.detectFace("image.jpg"), '2');
   });
 }
