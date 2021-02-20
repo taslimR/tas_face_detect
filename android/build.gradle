@@ -31,3 +31,10 @@ android {
         disable 'InvalidPackage'
     }
 }
+
+dependencies {
+    // ...
+    // Use this dependency to use dynamically downloaded model in Google Play Service
+    implementation 'com.google.android.gms:play-services-mlkit-face-detection:16.1.1'
+}
+

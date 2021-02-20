@@ -2,10 +2,14 @@ package com.taslim.tas_face_detect;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.FaceDetector;
 
 import androidx.annotation.NonNull;
 
+
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.face.FaceDetection;
+import com.google.mlkit.vision.face.FaceDetector;
+import com.google.mlkit.vision.face.FaceDetectorOptions;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -35,9 +39,16 @@ public class TasFaceDetectPlugin implements FlutterPlugin, MethodCallHandler {
       int faceCount = 0;
       try {
         Bitmap bitmap = BitmapFactory.decodeFile(path);
-        FaceDetector detector = new FaceDetector(bitmap.getWidth(), bitmap.getHeight(), 10);
-        FaceDetector.Face[] faces = new FaceDetector.Face[10];
-        faceCount = detector.findFaces(bitmap, faces);
+//        FaceDetector detector = new FaceDetector(bitmap.getWidth(), bitmap.getHeight(), 10);
+//        FaceDetector.Face[] faces = new FaceDetector.Face[10];
+//        faceCount = detector.findFaces(bitmap, faces);
+        FaceDetectorOptions options = new FaceDetectorOptions.Builder()
+                .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+                .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+                .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+                .build();
+        FaceDetector detector =  FaceDetection.getClient(options);
+        faceCount = detector.process(InputImage.fromBitmap(bitmap, 0)).getResult().size();
       } catch (Exception e) {
         e.printStackTrace();
       }
