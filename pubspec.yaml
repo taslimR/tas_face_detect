@@ -2,7 +2,7 @@ name: tas_face_detect
 description: A new flutter plugin to get number of faces in an image.
 version: 0.0.1
 author: Taslim
-homepage:
+homepage: https://github.com/taslimR/tas_face_detect
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
