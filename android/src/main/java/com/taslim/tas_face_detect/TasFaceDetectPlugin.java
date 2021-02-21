@@ -63,7 +63,7 @@ public class TasFaceDetectPlugin implements FlutterPlugin, MethodCallHandler {
                                   public void onSuccess(List<Face> faces) {
                                     // Task completed successfully
                                     // ...
-                                    Toast.makeText(null, "Face count : " + faces.size(), Toast.LENGTH_LONG);
+//                                    Toast.makeText(null, "Face count : " + faces.size(), Toast.LENGTH_LONG);
                                   }
                                 })
                         .addOnFailureListener(
