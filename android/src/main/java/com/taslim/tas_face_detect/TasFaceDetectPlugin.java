@@ -2,14 +2,21 @@ package com.taslim.tas_face_detect;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.face.Face;
 import com.google.mlkit.vision.face.FaceDetection;
 import com.google.mlkit.vision.face.FaceDetector;
 import com.google.mlkit.vision.face.FaceDetectorOptions;
+
+import java.util.List;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -48,7 +55,27 @@ public class TasFaceDetectPlugin implements FlutterPlugin, MethodCallHandler {
                 .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
                 .build();
         FaceDetector detector =  FaceDetection.getClient(options);
-        faceCount = detector.process(InputImage.fromBitmap(bitmap, 0)).getResult().size();
+        Task<List<Face>> resultFace =
+                detector.process(InputImage.fromBitmap(bitmap, 0))
+                        .addOnSuccessListener(
+                                new OnSuccessListener<List<Face>>() {
+                                  @Override
+                                  public void onSuccess(List<Face> faces) {
+                                    // Task completed successfully
+                                    // ...
+                                    Toast.makeText(null, "Face count : " + faces.size(), Toast.LENGTH_LONG);
+                                  }
+                                })
+                        .addOnFailureListener(
+                                new OnFailureListener() {
+                                  @Override
+                                  public void onFailure(@NonNull Exception e) {
+                                    // Task failed with an exception
+                                    // ...
+                                  }
+                                });
+//        faceCount = detector.process(InputImage.fromBitmap(bitmap, 0)).;
+        faceCount = resultFace.getResult().size();
       } catch (Exception e) {
         e.printStackTrace();
       }
