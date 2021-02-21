@@ -18,6 +18,7 @@ import com.google.mlkit.vision.face.FaceDetectorOptions;
 
 import java.util.List;
 
+import io.flutter.Log;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -43,7 +44,7 @@ public class TasFaceDetectPlugin implements FlutterPlugin, MethodCallHandler {
     if (call.method.equals("findFaces")) {
       String path = call.argument("path");
       System.out.println(path);
-      final int[] faceCount = {0};
+      int faceCount = -1;
       try {
         Bitmap bitmap = BitmapFactory.decodeFile(path);
 //        FaceDetector detector = new FaceDetector(bitmap.getWidth(), bitmap.getHeight(), 10);
@@ -64,7 +65,8 @@ public class TasFaceDetectPlugin implements FlutterPlugin, MethodCallHandler {
                                     // Task completed successfully
                                     // ...
 //                                    Toast.makeText(null, "Face count : " + faces.size(), Toast.LENGTH_LONG);
-                                    faceCount[0] = faces.size();
+//                                    faceCount = faces.size();
+                                    Log.d("FaceCount", "success");
                                   }
                                 })
                         .addOnFailureListener(
@@ -73,14 +75,17 @@ public class TasFaceDetectPlugin implements FlutterPlugin, MethodCallHandler {
                                   public void onFailure(@NonNull Exception e) {
                                     // Task failed with an exception
                                     // ...
+                                    Log.d("FaceCount", "failed");
                                   }
                                 });
 //        faceCount = detector.process(InputImage.fromBitmap(bitmap, 0)).;
-//        faceCount = resultFace.getResult().size();
+        if(resultFace.isComplete()) {
+          faceCount = resultFace.getResult().size();
+        }
       } catch (Exception e) {
         e.printStackTrace();
       }
-      result.success(faceCount[0]);
+      result.success(faceCount);
     } else {
       result.notImplemented();
     }
