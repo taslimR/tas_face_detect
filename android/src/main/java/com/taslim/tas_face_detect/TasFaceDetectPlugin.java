@@ -43,7 +43,7 @@ public class TasFaceDetectPlugin implements FlutterPlugin, MethodCallHandler {
     if (call.method.equals("findFaces")) {
       String path = call.argument("path");
       System.out.println(path);
-      int faceCount = 0;
+      final int[] faceCount = {0};
       try {
         Bitmap bitmap = BitmapFactory.decodeFile(path);
 //        FaceDetector detector = new FaceDetector(bitmap.getWidth(), bitmap.getHeight(), 10);
@@ -64,6 +64,7 @@ public class TasFaceDetectPlugin implements FlutterPlugin, MethodCallHandler {
                                     // Task completed successfully
                                     // ...
 //                                    Toast.makeText(null, "Face count : " + faces.size(), Toast.LENGTH_LONG);
+                                    faceCount[0] = faces.size();
                                   }
                                 })
                         .addOnFailureListener(
@@ -75,11 +76,11 @@ public class TasFaceDetectPlugin implements FlutterPlugin, MethodCallHandler {
                                   }
                                 });
 //        faceCount = detector.process(InputImage.fromBitmap(bitmap, 0)).;
-        faceCount = resultFace.getResult().size();
+//        faceCount = resultFace.getResult().size();
       } catch (Exception e) {
         e.printStackTrace();
       }
-      result.success(faceCount);
+      result.success(faceCount[0]);
     } else {
       result.notImplemented();
     }
